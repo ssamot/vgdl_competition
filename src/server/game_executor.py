@@ -63,7 +63,7 @@ def main(args):
     language = detect_language(dir_name)
     if(language == None):
         logger.error("Language Not Supported")
-        exit(1)
+        clean_exit()
         
         
     exec_function = None
