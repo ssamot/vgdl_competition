@@ -17,9 +17,14 @@ public class Agent {
     public static void main(String[] args) throws Exception {
         InputStreamReader isr = new InputStreamReader(System.in);
         BufferedReader br = new BufferedReader(isr);
-        while (true) {
+        //for (String in = br.readLine();in!=null;) {
+        while(true) {
             String in = br.readLine();
-            System.out.println("Handfish");
+            if(in ==null) {
+                break;
+            }
+            System.out.println("HandfishEND_COMMAND");
+            //System.err.println(in  + "test");
             System.err.println("Handfish" + in.charAt(0));
         }
     }
