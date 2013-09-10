@@ -1,10 +1,10 @@
 
 
-import javax.xml.stream.util.StreamReaderDelegate;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.io.Reader;
-import java.nio.Buffer;
+import com.eclipsesource.json.*;
+
 
 /**
  * Created by IntelliJ IDEA.
@@ -19,6 +19,7 @@ public class Agent {
         BufferedReader br = new BufferedReader(isr);
         while (true) {
             String in = br.readLine();
+
             System.out.println("Handfish");
             System.err.println("Handfish" + in.charAt(0));
         }
