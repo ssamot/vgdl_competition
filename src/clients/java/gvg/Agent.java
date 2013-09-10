@@ -12,7 +12,7 @@ import java.nio.Buffer;
  * Date: //130910
  * Time: 14:19 PM
  */
-public class StuffInOut {
+public class Agent {
 
     public static void main(String[] args) throws Exception {
         InputStreamReader isr = new InputStreamReader(System.in);
