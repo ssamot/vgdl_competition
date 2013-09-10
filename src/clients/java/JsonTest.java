@@ -13,10 +13,9 @@ import java.util.Iterator;
 public class JsonTest {
 
 
-    public static String stateExample = "{sprites:\n" +
-            "{\"type\":\"bomb\", x:3, y:13}\n" +
-            "{\"type\":\"mouse\", x:9, y:7}\n" +
-            "}";
+    public static String stateExample = "[\n" +
+            "{\"type\":\"bomb\", \"x\":\"3\", \"y\":\"13\"}\n" +
+            "]";
 
     public static void main(String[] args) {
         System.out.println(stateExample);
@@ -24,7 +23,8 @@ public class JsonTest {
         Iterator it = array.iterator();
         while (it.hasNext()) {
             JsonObject o = (JsonObject) it.next();
-            System.out.println(o);
+
+            System.out.println(o.names());
         }
 
     }
