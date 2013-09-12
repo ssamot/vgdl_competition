@@ -35,7 +35,7 @@ nosetests.xml
 .pydevproject
 
 # IntelliJ
-.iml
-.ipr
-.iws
-.class
+*.iml
+*.ipr
+*.iws
+*.class
