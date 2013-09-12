@@ -1,0 +1,9 @@
+2013-09-12 11:55:27,342 CRITICAL Cannot extract zip archive, File is not a zip file
+2013-09-12 11:58:52,459 CRITICAL Language not supported
+
+2013-09-12 12:06:48,909 DEBUG zip_name ./examples/dummy.zip
+2013-09-12 12:06:48,909 DEBUG run_id  1
+2013-09-12 12:06:48,909 DEBUG user_id dummy2
+2013-09-12 12:06:48,909 INFO 4, 8, 5, 9, 8, 1
+2013-09-12 12:06:48,909 INFO 0, 1, 2, 3, 4, 5
+

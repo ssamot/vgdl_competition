@@ -11,6 +11,9 @@ import logging
 import os
 import shutil
 import subprocess
+from random import randint
+import ntpath
+
 
 
 
@@ -24,46 +27,62 @@ supported_file_names["C"] = "agent.c"
 supported_languages = {v:k for k, v in supported_file_names.items()}
 
 
-TMP_DIR_NAME = "/tmp"
+
 
 def execute_python(dir_name, args, game):
-    return 5
+    return randint(1,10)
 
-def clean_exit(clean):
+def clean_exit(dir_name,clean):
+    print clean
     if(clean):
+        if(os.path.isdir(dir_name)):
+            shutil.rmtree(dir_name)
+    exit(0)
 
 def detect_language(dir_name):
-    root_files = glob.glob(dir_name)
+    root_files = glob.glob(dir_name + "/*")
+
     for root_file in root_files:
-        if root_file in supported_languages:
-            return supported_languages[root_file]
+        file_name  = ntpath.basename(root_file)
+        if file_name in supported_languages:
+            return supported_languages[file_name]
             
     return None
 
 def main(args):
-    
+   
+    #print args.tmp_dir, args.user_name, args.run_id
+    dir_name = args.tmp_dir + "/" + args.user_name +  "/" + str(args.run_id)     
+
+        
+    if(os.path.isdir(dir_name)):
+        shutil.rmtree(dir_name)
+    os.makedirs(dir_name)   
+   
     logger = logging.getLogger('game_executor')
-    hdlr = logging.FileHandler(args.run_id + '.log')
+    hdlr = logging.FileHandler(dir_name + '/execution.log')
+    #print dir_name + '/execution.log'
     formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
     hdlr.setFormatter(formatter)
     logger.addHandler(hdlr) 
-    logger.setLevel(logging.WARNING)
+    logger.setLevel(logging.DEBUG)
 
-
-    dir_name = TMP_DIR_NAME + "/" +  args.run_id     
-
-        
+   
     
-    shutil.rmtree(dir_name)
-    os.makedirs(dir_name)
-
-    with zipfile.ZipFile(args.zip_name, "r") as z:
-        z.extractall(dir_name)
+    logger.debug("zip_name " + str(args.zip_name))
+    logger.debug("run_id  " +  str(args.run_id))
+    logger.debug("user_id "  + str(args.user_name))
+    try:
+        with zipfile.ZipFile(args.zip_name, "r") as z:
+            z.extractall(dir_name)
+    except Exception, e: # Catch all possible exceptions 
+        logger.critical("Cannot extract zip archive, " + str(e))
+        clean_exit(dir_name, args.clean)
     
     language = detect_language(dir_name)
     if(language == None):
-        logger.error("Language Not Supported")
-        clean_exit()
+        logger.critical("Language not supported")
+        clean_exit(dir_name, args.clean)
         
         
     exec_function = None
@@ -71,11 +90,15 @@ def main(args):
         exec_function = execute_python
         
     
-    [exec_function(dir_name, args, game)for game in args.game_ids for i in range(args.n_times)]
-        
-    # clean up
-        
+    scores = [exec_function(dir_name, args, game)for game in args.game_ids for i in range(args.n_times)]
+    action_file_names = [i for i in range(len(scores))]    
+    print scores, action_file_names
+    logger.info(str(scores)[1:-1])
+    logger.info(str(action_file_names)[1:-1])    
 
+    
+    if(args.clean):
+        clean_exit(dir_name, args.clean)
     
 if __name__=="__main__":
     # List of games
@@ -86,15 +109,19 @@ if __name__=="__main__":
     parser = argparse.ArgumentParser(description='Execute an agent vs a list of games.')
     parser.add_argument('--game_ids', type=int, nargs='+',
                        help='List of game ids to execute',required=True)
-    parser.add_argument('--n_times', type=int, nargs=1,
+    parser.add_argument('--n_times', type=int,
                        help='Number of times to run each game',required=True)  
-    parser.add_argument('--zip_name', type=str, nargs=1,
+    parser.add_argument('--zip_name', type=str,
                        help='Zip file name of agent',required=True)  
-    parser.add_argument('--agent_id', type=int, nargs=1,
+    parser.add_argument('--agent_id', type=int,
                        help='Id of the agent',required=True)  
-    parser.add_argument('--run_id', type=int, nargs=1,
-                       help='Id of the current run',required=True)  
-    parser.add_argument('--clean', type=bool, nargs=1,
+    parser.add_argument('--run_id', type=int,
+                       help='Id of the current run',required=True)              
+    parser.add_argument('--user_name', type=str,
+                       help='User name of the player',required=True)  
+    parser.add_argument('--tmp_dir', type=str,
+                       help='Temporary directory',required=True)
+    parser.add_argument('--clean', type=bool,
                        help='Should I clean-up after running this',required=True)  
                        
                        
