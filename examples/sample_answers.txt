@@ -1,3 +1,17 @@
+------------------------------------------
+Format of input:
+------------------------------------------
+
+game_executor.py [-h] --game_ids GAME_IDS [GAME_IDS ...] --n_times
+                        N_TIMES --zip_name ZIP_NAME --agent_id AGENT_ID
+                        --run_id RUN_ID --user_name USER_NAME --tmp_dir
+                        TMP_DIR --clean CLEAN
+
+
+------------------------------------------
+Example of output:
+------------------------------------------
+
 2013-09-12 11:55:27,342 CRITICAL Cannot extract zip archive, File is not a zip file
 2013-09-12 11:58:52,459 CRITICAL Language not supported
 
@@ -6,4 +20,17 @@
 2013-09-12 12:06:48,909 DEBUG user_id dummy2
 2013-09-12 12:06:48,909 INFO 4, 8, 5, 9, 8, 1
 2013-09-12 12:06:48,909 INFO 0, 1, 2, 3, 4, 5
+
+
+------------------------------------------
+Directories. 
+------------------------------------------
+
+Output directories:
+
+ * GVGWeb/results/[username]/[run_id]/execution.log
+ * GVGWeb/results/[username]/[run_id]/action_files
+
+Controller directories:
+ * GVGWeb/controllers/[username]/controller.zip
 
