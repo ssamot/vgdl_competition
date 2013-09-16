@@ -70,11 +70,15 @@ def main(args):
    
     
     logger.debug("zip_name " + str(args.zip_name))
-    logger.debug("run_id  " +  str(args.run_id))
-    logger.debug("user_id "  + str(args.user_name))
+    logger.debug("run_id " +  str(args.run_id))
+    logger.debug("user_id "  + str(args.agent_id))
     try:
         with zipfile.ZipFile(args.zip_name, "r") as z:
             z.extractall(dir_name)
+	
+	shutil.copy(args.zip_name, dir_name)
+
+
     except Exception, e: # Catch all possible exceptions 
         logger.critical("Cannot extract zip archive, " + str(e))
         clean_exit(dir_name, args.clean)
