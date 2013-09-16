@@ -1,2 +1,3 @@
-ROOT_DIR=/home/ssamot/projects/vgdl/vgdl_competition
-export PYTHONPATH=$PYTHONPATH:$ROOT_DIR/src/server
+ROOT_DIR=/home/ssamot/projects/vgdl
+
+export PYTHONPATH=.:$ROOT_DIR/vgdl_competition/src/server:$ROOT_DIR/py-vgdl:$ROOT_DIR/vgdl_competition/src/clients/python:

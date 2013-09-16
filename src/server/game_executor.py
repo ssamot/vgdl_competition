@@ -92,7 +92,7 @@ def main(args):
     
     scores = [exec_function(dir_name, args, game)for game in args.game_ids for i in range(args.n_times)]
     action_file_names = [i for i in range(len(scores))]    
-    print scores, action_file_names
+    #print scores, action_file_names
     logger.info(str(scores)[1:-1])
     logger.info(str(action_file_names)[1:-1])    
 

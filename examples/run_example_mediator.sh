@@ -1,0 +1,1 @@
+python ../../vgdl_competition/src/server/vgdl_mediator.py
