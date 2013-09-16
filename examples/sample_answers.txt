@@ -26,10 +26,16 @@ Example of output:
 Directories. 
 ------------------------------------------
 
-Output directories:
+Output log file:
 
  * GVGWeb/results/[username]/[run_id]/execution.log
- * GVGWeb/results/[username]/[run_id]/action_files
+ 
+Output actions files (seq games played, one for game):
+
+ * GVGWeb/results/[username]/[run_id]/0.txt
+ * GVGWeb/results/[username]/[run_id]/1.txt
+ 	[...]
+ * GVGWeb/results/[username]/[run_id]/N.txt
 
 Controller directories:
  * GVGWeb/controllers/[username]/controller.zip
