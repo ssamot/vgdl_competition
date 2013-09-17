@@ -28,7 +28,8 @@ def mediate(game, args,headless = True, persist_movie = True):
     
     
     win = None
-    score = None        
+    score = None     
+    # play until game ends
     while win is None:    
         state = game.getFullState()
         j = json.dumps(state)
@@ -41,7 +42,7 @@ def mediate(game, args,headless = True, persist_movie = True):
         action = j_action["action"]    
         win,score = game.tick(action,headless, headless)
         #exit(0)
-            
+    return win,score
 def load_game(module_str):
    
     module  = importlib.import_module(module_str)
@@ -70,7 +71,7 @@ def compile_java(file_name):
 if __name__=="__main__":
     #compile_java("Agent.java")
     game = load_game("examples.gridphysics.frogs")
-    mediate(game,"python /home/ssamot/projects/vgdl/vgdl_competition/src/clients/python/client.py")
+    print mediate(game,"python /home/ssamot/projects/vgdl/vgdl_competition/src/clients/python/client.py")
     #args = ["java", "-cp" ]
     #grep_stdout = p.communicate(input='one\ntwo\nthree\nfour\nfive\nsix\n')[0]
     #p.communicate()

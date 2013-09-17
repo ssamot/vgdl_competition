@@ -20,9 +20,9 @@ import ntpath
 
 
 supported_file_names = {}
-supported_file_names["python"] = "agent.py"
-supported_file_names["Java"] = "Agent.java"
-supported_file_names["C"] = "agent.c"
+supported_file_names["python"] = "client.py"
+supported_file_names["Java"] = "Client.java"
+supported_file_names["C"] = "client.c"
 
 supported_languages = {v:k for k, v in supported_file_names.items()}
 
