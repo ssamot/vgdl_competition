@@ -29,6 +29,7 @@ def mediate(game, args,headless = True, persist_movie = True):
     
     win = None
     score = None     
+    error = None
     # play until game ends
     while win is None:    
         state = game.getFullState()
@@ -42,19 +43,23 @@ def mediate(game, args,headless = True, persist_movie = True):
         action = j_action["action"]    
         win,score = game.tick(action,headless, headless)
         #exit(0)
-    return win,score
-def load_game(module_str):
+    return win,score, error
+def load_game(module_str, level_str):
    
     module  = importlib.import_module(module_str)
-    
+
+    game = None    
+    level = None
     
     for key in module.__dict__.keys():
         #print key
         if(key.endswith("game")):
             game = module.__dict__[key]
-        if(key.endswith("level")):
+        if(key.endswith("level") and key == level_str):
             level = module.__dict__[key]
             
+    if(level is None):
+        return None
     #print game, level
     g = VGDLParser.playGame(game, level, headless = True, persist_movie = True, movie_dir = "./tmp/")
     #g.startGameExternalPlayer(headless = True, persist_movie = True)

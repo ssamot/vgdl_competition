@@ -39,3 +39,6 @@ nosetests.xml
 *.ipr
 *.iws
 *.class
+
+# Properties
+*.properties
