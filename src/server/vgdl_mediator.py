@@ -31,6 +31,7 @@ def mediate(game, args,headless = True, persist_movie = True):
     score = None     
     error = None
     # play until game ends
+    actions = []
     while win is None:    
         state = game.getFullState()
         j = json.dumps(state)
@@ -40,10 +41,11 @@ def mediate(game, args,headless = True, persist_movie = True):
         line = p.stdout.readline()
         j_action = json.loads(line)
       
-        action = j_action["action"]    
+        action = j_action["action"]  
+        actions.append(action)
         win,score = game.tick(action,headless, headless)
         #exit(0)
-    return win,score, error
+    return win,score, actions, error
 def load_game(module_str, level_str):
    
     module  = importlib.import_module(module_str)

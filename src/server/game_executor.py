@@ -80,10 +80,12 @@ def execute_game_map(logger, game_map, args, cmd_line, dir_name,execution_log):
             if(game == None):
                 logger.fatal(tuple_to_str(module) + ", " + tuple_to_str(level)  + ", "  +  "Cannot Load game/level")
                 clean_exit(args, logger, dir_name, execution_log)
-            win, score, error_str  = mediate(game,cmd_line)
-            
+            win, score, actions, error_str  = mediate(game,cmd_line)
+            action_filename = dir_name + "/" + "actions.log"
+            with open(action_filename, "w") as action_file:
+                action_file.write(str(actions))
             if(error_str is None):
-                logger.info(tuple_to_str(module) + " " + tuple_to_str(level) + " "  +  str(score))
+                logger.info(tuple_to_str(module) + " " + tuple_to_str(level) + " "  +  str(score) + " "  +  str(action_filename))
             else: 
                 logger.error(tuple_to_str(module) + " " + tuple_to_str(level)  + " "  + error_str)
                 clean_exit(args, logger, dir_name, execution_log)
