@@ -56,11 +56,17 @@ def extract_game_map(args):
             game_name = (long(game), db_utils.get_game_info(db,game)["game_desc_file"])
             #print db_utils.get_levels_from_game(db,game)
             lvl_rows = db_utils.get_levels_from_game(db,game)
+    
+            lvl_names = []            
+            for row in lvl_rows:
+                #print row[0], lvls
+                if(str(row[0]) in lvls):
+                    lvl_names.append((long(row[0]),row[1]))
             
-            lvls =  [(long(row[0]),row[1]) for row in lvl_rows]
+            #lvls =  [(long(row[0]),row[1]) if row[0] in lvls for row in lvl_rows]
             #print lvls, exit(0) 
                 
-            game_map[game_name] = tuple(lvls)
+            game_map[game_name] = tuple(lvl_names)
             
         else:
             game_map[(-100L,game)] = tuple(lvls)
