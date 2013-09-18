@@ -11,11 +11,14 @@ import ConfigParser
 
 def db_connect(properties_file):
     config = ConfigParser.ConfigParser()
+    #print properties_file
+    #open(properties_file)
     config.read(properties_file)
-    host = config.get("host")
-    user = config.get("user")
-    passwd = config.get("passwd")
-    db_name = config.get("db_name")    
+    #print config.sections()
+    host = config.get("Database", "host")
+    user = config.get("Database", "user")
+    passwd = config.get("Database", "passwd")
+    db_name = config.get("Database", "db")    
     db = mdb.connect(host=host, # your host, usually localhost
                      user=user, # your username
                      passwd=passwd, # your password
@@ -31,6 +34,8 @@ def get_game_info(db, game_id):
     cur.execute("SELECT * from games where game_id = %s", (game_id))
     game_data = cur.fetchone()
     return game_data
+    
+
 
 # Gets all info from all levels given a game ID. Data returned in array.
 def get_levels_from_game(db, game_id):

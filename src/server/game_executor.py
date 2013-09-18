@@ -15,6 +15,7 @@ from random import randint
 import ntpath
 from vgdl_mediator import load_game, mediate
 import db_utils
+import results_manager
 
 
 
@@ -34,7 +35,10 @@ execution_commands["python"] = "cd {dir_name}; python client.py"
 
 supported_languages = {v:k for k, v in supported_file_names.items()}
 
-    
+
+def tuple_to_str(tpl):
+    #print  (",".join(map(str,tpl)))[:-1], tpl
+    return "(" + ",".join(map(str,tpl)) + ")"
 
 
 def extract_game_map(args):
@@ -48,30 +52,47 @@ def extract_game_map(args):
         if(game.isdigit()):
             if(db is None):
                 db = db_utils.db_connect(args.db_properties)
+            #print db_utils.get_game_info(db,game)
+            game_name = (long(game), db_utils.get_game_info(db,game)["game_desc_file"])
+            #print db_utils.get_levels_from_game(db,game)
+            lvl_rows = db_utils.get_levels_from_game(db,game)
             
+            lvls =  [(long(row[0]),row[1]) for row in lvl_rows]
+            #print lvls, exit(0) 
+                
+            game_map[game_name] = tuple(lvls)
             
         else:
-            game_map[game] = tuple(lvls)
+            game_map[(-100L,game)] = tuple(lvls)
             
     return game_map
     
-def execute_game_map(logger, game_map, args, cmd_line):
+def execute_game_map(logger, game_map, args, cmd_line, dir_name,execution_log):
     for module in game_map:
         for level in game_map[module]:
-            game = load_game(module,level)
+            game = load_game(module[1],level[1])
+            if(game == None):
+                logger.fatal(tuple_to_str(module) + ", " + tuple_to_str(level)  + ", "  +  "Cannot Load game/level")
+                clean_exit(args, logger, dir_name, execution_log)
             win, score, error_str  = mediate(game,cmd_line)
             
             if(error_str is None):
-                logger.info(module + ", " + level  + ", "  +  str(score))
+                logger.info(tuple_to_str(module) + " " + tuple_to_str(level) + " "  +  str(score))
             else: 
-                logger.info(module + ", " + level  + ", "  + error_str)
+                logger.error(tuple_to_str(module) + " " + tuple_to_str(level)  + " "  + error_str)
+                clean_exit(args, logger, dir_name, execution_log)
             
 
 
-def clean_exit(dir_name,clean):
-    if(clean):
+def clean_exit(args, logger, dir_name,execution_log):
+    if(args.upload):
+        args.execution_log = execution_log
+        print "Uploading results to DB"
+        results_manager.process_log(args)
+    if(args.clean):
         if(os.path.isdir(dir_name)):
             shutil.rmtree(dir_name)
+    logger.debug("RUN_COMPLETED")
     exit(0)
 
 def detect_language(dir_name):
@@ -100,7 +121,8 @@ def explode_run(args):
     shutil.copy(args.zip_name, dir_name)
 
     logger = logging.getLogger('game_executor')
-    hdlr = logging.FileHandler(dir_name + '/execution.log')
+    execution_log = dir_name + '/execution.log'
+    hdlr = logging.FileHandler(execution_log)
     #print dir_name + '/execution.log'
     formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
     hdlr.setFormatter(formatter)
@@ -119,18 +141,18 @@ def explode_run(args):
 	
     except Exception, e: # Catch all possible exceptions 
         logger.critical("Cannot extract zip archive, " + str(e))
-        clean_exit(dir_name, args.clean)
+        clean_exit(args, logger, dir_name, execution_log)
     
     language = detect_language(dir_name)
     if(language == None):
         logger.critical("Language not supported")
-        clean_exit(dir_name, args.clean)
+        clean_exit(args, logger, dir_name, execution_log)
         
         
     
     game_map = extract_game_map(args)
     
-    execute_game_map(logger,game_map,args, execution_commands[language].format(dir_name = dir_name) )
+    execute_game_map(logger,game_map,args, execution_commands[language].format(dir_name = dir_name), dir_name,execution_log )
     
     #scores = [exec_function(dir_name, args, game)for game in args.game_ids for i in range(args.n_times)]
     #action_file_names = [i for i in range(len(scores))]    
@@ -140,7 +162,7 @@ def explode_run(args):
 
     
    
-    clean_exit(dir_name, args.clean)
+    clean_exit(args, logger, dir_name, execution_log)
     
 if __name__=="__main__":
     # List of games
@@ -163,6 +185,10 @@ if __name__=="__main__":
                        help='User name of the player',required=True)  
     parser.add_argument('--tmp_dir', type=str,
                        help='Temporary directory',required=True)
+                       
+    parser.add_argument('--upload', action='store_const', const=True,
+                       help='Upload the scores to the db as well',required=False)
+                       
     parser.add_argument('--clean', action='store_const', const=True,
                        help='Should I clean-up after running this',required=False)  
                        
