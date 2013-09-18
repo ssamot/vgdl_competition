@@ -44,7 +44,7 @@ def process_log(args):
             if(i == 2):
                 user_id = long(line.split(" ")[-1])
             if(i>2):
-                splitted = line.split(" ")
+                splitted = line[:-1].split(" ")
                 print run_id, user_id, splitted
                 if(splitted[2] != "INFO" ):
                     # check if we have reached the end of the file

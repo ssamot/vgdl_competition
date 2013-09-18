@@ -81,7 +81,7 @@ def execute_game_map(logger, game_map, args, cmd_line, dir_name,execution_log):
                 logger.fatal(tuple_to_str(module) + ", " + tuple_to_str(level)  + ", "  +  "Cannot Load game/level")
                 clean_exit(args, logger, dir_name, execution_log)
             win, score, actions, error_str  = mediate(game,cmd_line)
-            action_filename = dir_name + "/" + "actions.log"
+            action_filename = dir_name + "/" + str(module[0]) + "-" + str(level[0]) + "-actions.log"
             with open(action_filename, "w") as action_file:
                 action_file.write(str(actions))
             if(error_str is None):
