@@ -14,6 +14,8 @@ DUMMY_COMMAND["Dummy"] = 2
 
 END_COMMAND = "END_COMMAND\n"
 
+MAXIMUM_TICKS = 1000
+
 
 def mediate(game, args,headless = True, persist_movie = True):
     p = Popen(args, shell=True, bufsize=1000000,
@@ -28,11 +30,14 @@ def mediate(game, args,headless = True, persist_movie = True):
     
     
     win = None
-    score = None     
+    score = 0     
     error = None
     # play until game ends
     actions = []
-    while win is None:    
+    ticks = 0
+    while win is None and ticks< 1000: 
+        print ticks
+        ticks+=1
         state = game.getFullState()
         j = json.dumps(state)
         
