@@ -50,6 +50,8 @@ def mediate(game, args,headless = True, persist_movie = True):
         actions.append(action)
         win,score = game.tick(action,headless, headless)
         #exit(0)
+    if(score is None):
+        score = 0
     return win,score, actions, error
 def load_game(module_str, level_str):
    
