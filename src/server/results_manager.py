@@ -77,7 +77,7 @@ def process_log(args):
         score = calc_score(games)
         #Set controller status to the proper new state:
         cur.execute("UPDATE runs set run_state = 'ok', end_time = %s, run_log_file = %s, score = %s where run_id = %s", (current_timestamp,args.execution_log,score,run_id))
-        cur.execute("UPDATE users set controller_status = 'ok' where user_id = %s", (user_id))
+        cur.execute("UPDATE users set controller_status = 'OK' where user_id = %s", (user_id))
 
 	#One match per game played into the database:
         for game in games:		
