@@ -16,7 +16,9 @@ def calc_score(games):
     s = 0
     for game in games:
         s+=game[2]
-
+    return s
+    
+    
 def process_log(args):
 
     date_format = '%Y-%m-%d %H:%M:%S'
