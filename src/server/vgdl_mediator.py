@@ -6,6 +6,7 @@ from vgdl.core import VGDLParser
 import importlib
 import sys
 import os
+import time
 
 
 DUMMY_COMMAND = {}
@@ -35,21 +36,54 @@ def mediate(game, args,headless = True, persist_movie = True):
     # play until game ends
     actions = []
     ticks = 0
-    while win is None and ticks< 1000: 
-        print ticks
+    #print line; exit()
+    while win is None and ticks< 1000:
+        start = time.time()
+        current_state =  game.getFullState(False)
+
+        #print ticks
         ticks+=1
-        state = game.getFullState()
+        state = game.getFullState(True)
+
+
         j = json.dumps(state)
         
         p.stdin.write(j + os.linesep);p.stdin.flush()
-        
-        line = p.stdout.readline()
-        j_action = json.loads(line)
-      
-        action = j_action["action"]  
+
+
+        while(True):
+            line = p.stdout.readline()
+            #print line; exit()
+            if(line[0]) == "0":
+                j_action = json.loads(line[1:])
+                action = j_action["action"]
+                break
+            else:
+
+                #j_action = json.loads(line[1:])
+                j_action,j_state = line.split(";")
+                j_action = json.loads(j_action[1:])
+                j_state = json.loads(j_state)
+                simulated_action = j_action["action"]
+
+                game.setFullState(j_state, True)
+
+                win1,score1 = game.tick(simulated_action,headless, headless)
+                future_state =  game.getFullState(True)
+
+
+                j_future_state = json.dumps(future_state)
+                p.stdin.write(j_future_state + os.linesep);p.stdin.flush()
+
+
+
+        print (start - time.time()), "Seconds"
+
         actions.append(action)
+        game.setFullState(current_state)
         win,score = game.tick(action,headless, headless)
         #exit(0)
+        
     if(score is None):
         score = 0
     return win,score, actions, error

@@ -94,6 +94,7 @@ def process_log(args):
         cur.execute("UPDATE users set controller_status = 'crash' where user_id = %s", (user_id))
 
     elif log_level == 'CRITICAL':
+        print  (current_timestamp,args.execution_log,error_msg,run_id)
         #Set controller status to the proper new state:
         cur.execute("UPDATE runs set run_state = 'failed', end_time = %s, run_log_file = %s, run_msg = %s where run_id = %s", (current_timestamp,args.execution_log,error_msg,run_id))
         cur.execute("UPDATE users set controller_status = 'failed' where user_id = %s", (user_id))

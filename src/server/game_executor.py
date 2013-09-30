@@ -72,13 +72,16 @@ def extract_game_map(args):
             game_map[game_name] = tuple(lvl_names)
             
         else:
-            game_map[(-100L,game)] = tuple(lvls)
+            lvl_names = zip(tuple(range(0,len(lvls))), lvls)
+            #print lvl_names
+            game_map[(-100L,game)] = tuple(lvl_names)
             
     return game_map
     
 def execute_game_map(logger, game_map, args, cmd_line, dir_name,execution_log):
     for module in game_map:
         for level in game_map[module]:
+            print level
             game = load_game(module[1],level[1])
             if(game == None):
                 logger.fatal(tuple_to_str(module) + ", " + tuple_to_str(level)  + ", "  +  "Cannot Load game/level")
@@ -162,7 +165,7 @@ def explode_run(args):
         
     
     game_map = extract_game_map(args)
-    
+    #print "here"
     execute_game_map(logger,game_map,args, execution_commands[language].format(dir_name = dir_name), dir_name,execution_log )
     
     #scores = [exec_function(dir_name, args, game)for game in args.game_ids for i in range(args.n_times)]
@@ -207,7 +210,7 @@ if __name__=="__main__":
     parser.add_argument('--db_properties', type=str,
                        help='Database properties',required=False)      
     
-                       
+    #print "etf"
                        
     args = parser.parse_args()
     explode_run(args) 
