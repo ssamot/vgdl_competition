@@ -43,11 +43,13 @@ class SimpleGameState:
         """ Get all possible moves from this state.
         """
         #print (self.moves, file=sys.stderr)
-        #print (self.map_state["score"], file=sys.stderr)
-        if(self.map_state["score"] > -1 or self.depth > 30):
-            #print ("finished_run", file=sys.stderr)
+        #print ("score" + str(self.map_state["score"]) + "----" + str(self.depth), file=sys.stderr)
+        score = self.map_state["score"]
+        if(score == 1001 or score == 0   or self.depth > 30):
+            #print ("finished_run" + str(score), file=sys.stderr)
+
             return []
-        return self.moves
+        return self.moves[:]
 
     def GetResult(self, playerjm):
         """ Get the game result from the viewpoint of playerjm.
@@ -68,31 +70,31 @@ def initialise(action_map):
     print("Initialisation Completed " + str(actions), file=sys.stderr)
 
 
-#def act(state_map):
-#    #print (actions, file=sys.stderr)
-#    #print(state_map, file=sys.stderr)
-#    #print ("Actions" , str(actions), file=sys.stderr)
-#    state_str = json.dumps(state_map)
-#
-#    state = SimpleGameState(state_str,actions[:],0)
-#    m = UCT(rootstate = state, itermax = 100, verbose = False)
-#    #print ("Chosen move" , str(m), file=sys.stderr)
-#    return m
-#    #return choice(actions)
-
-
 def act(state_map):
     #print (actions, file=sys.stderr)
     #print(state_map, file=sys.stderr)
-    action = choice(actions)
+    #print ("Actions" , str(actions), file=sys.stderr)
     state_str = json.dumps(state_map)
-    value = state_map["score"]
-    #print (value, file=sys.stderr)
-    state_map["score"] = 0
-    for i in range(100):
-        ts = queryStateAction(state_str,action)
 
+    state = SimpleGameState(state_str,actions[:],0)
+    m = UCT(rootstate = state, itermax = 100, verbose = False)
+    print ("Chosen move" , str(m), file=sys.stderr)
+    return m
+    #return choice(actions)
+    #return actions[0]
 
-    return choice(actions)
+#def act(state_map):
+#    #print (actions, file=sys.stderr)
+#    #print(state_map, file=sys.stderr)
+#    action = choice(actions)
+#    state_str = json.dumps(state_map)
+#    value = state_map["score"]
+#    #print (value, file=sys.stderr)
+#    state_map["score"] = 0
+#    for i in range(100):
+#        ts = queryStateAction(state_str,action)
+#
+#
+#    return choice(actions)
 
 

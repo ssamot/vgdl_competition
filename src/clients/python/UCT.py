@@ -285,7 +285,15 @@ class Node:
             lambda c: c.wins/c.visits + UCTK * sqrt(2*log(self.visits)/c.visits to vary the amount of
             exploration versus exploitation.
         """
-        s = sorted(self.childNodes, key = lambda c: c.wins/c.visits + sqrt(2*log(self.visits)/c.visits))[-1]
+        e = 0.5
+        r = random.random()
+
+        if(r > e):
+            s = sorted(self.childNodes, key = lambda c: c.wins/float(c.visits))[-1]
+        else:
+            s = random.choice(self.childNodes)
+
+        #s = sorted(self.childNodes, key = lambda c: c.wins/c.visits + sqrt(2*log(self.visits)/c.visits))[-1]
         return s
     
     def AddChild(self, m, s):
@@ -304,7 +312,7 @@ class Node:
         self.wins += result
 
     def __repr__(self):
-        return "[M:" + str(self.move) + " W/V:" + str(self.wins) + "/" + str(self.visits) + " U:" + str(self.untriedMoves) + "]"
+        return "[M:" + str(self.move) + " W/V:" + str(self.wins) + "/" + str(self.visits) + " W/V" + str(self.wins/float(self.visits)) +   "U:" + str(self.untriedMoves) + "]"
 
     def TreeToString(self, indent):
         s = self.IndentString(indent) + str(self)
@@ -346,18 +354,18 @@ def UCT(rootstate, itermax, verbose = False):
             m = random.choice(node.untriedMoves) 
             state.DoMove(m)
             node = node.AddChild(m,state) # add child and descend tree
-
+        #print(str(state.depth) + str(state.GetMoves()), file=sys.stderr)
         # Rollout - this can often be made orders of magnitude quicker using a state.GetRandomMove() function
         while state.GetMoves() != []: # while state is non-terminal
             state.DoMove(random.choice(state.GetMoves()))
-
+            #print(i,  file=sys.stderr)
         # Backpropagate
         while node != None: # backpropagate from the expanded node and work back to the root node
             node.Update(state.GetResult(node.playerJustMoved)) # state is terminal. Update node with result from POV of node.playerJustMoved
             node = node.parentNode
 
 
-    #print(len(rootnode.childNodes), file=sys.stderr)
+    print((rootnode.ChildrenToString()), file=sys.stderr)
     # Output some information about the tree - can be omitted
     #if (verbose):
     #    print(rootnode.TreeToString(0))
