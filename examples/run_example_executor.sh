@@ -3,24 +3,24 @@ zip -j working_python.zip ../../vgdl_competition/src/clients/python/client.py \
 
 #examples.gridphysics.frogs, frog_level
 
-#GAME="examples.gridphysics.frogs"
-#LEVEL="frog_level"
+GAME="examples.gridphysics.frogs"
+LEVEL="frog_level"
 
 #GAME="examples.gridphysics.chase"
 #LEVEL="chase_level"
 
 
-GAME="examples.gridphysics.pacman"
-LEVEL="pacman_level"
+#GAME="examples.gridphysics.pacman"
+#LEVEL="pacman_level"
 
 echo $LEVEL
 
-kernprof.py -l -v ../../vgdl_competition/src/server/game_executor.py  \
-                         --game_levels $GAME,$LEVEL \
-                         --n_times 1 --zip_name working_python.zip --agent_id 2 --run_id 100 --user_name ssamot \
-                         --tmp_dir /tmp --db_properties ../runtime/system.properties
+#kernprof.py -l -v ../../vgdl_competition/src/server/game_executor.py  \
+ #                        --game_levels $GAME,$LEVEL \
+ #                        --n_times 1 --zip_name working_python.zip --agent_id 2 --run_id 100 --user_name ssamot \
+ #                        --tmp_dir /tmp --db_properties ../runtime/system.properties
 
-#python ../../vgdl_competition/src/server/game_executor.py  \
+python ../../vgdl_competition/src/server/game_executor.py  \
                          --game_levels $GAME,$LEVEL \
                          --n_times 1 --zip_name working_python.zip --agent_id 2 --run_id 100 --user_name ssamot \
                          --tmp_dir /tmp --db_properties ../runtime/system.properties

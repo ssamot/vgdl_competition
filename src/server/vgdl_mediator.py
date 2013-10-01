@@ -61,6 +61,9 @@ def mediate(game, args,headless = True, persist_movie = True):
             else:
 
                 #j_action = json.loads(line[1:])
+                if(len(line.split(";"))!=2):
+                    print "ErrorLine", line
+                    exit()
                 j_action,j_state = line.split(";")
                 j_action = json.loads(j_action[1:])
                 j_state = json.loads(j_state)
@@ -70,7 +73,7 @@ def mediate(game, args,headless = True, persist_movie = True):
 
                 win1,score1 = game.tick(simulated_action,headless, headless)
                 future_state =  game.getFullState(True)
-
+                #print win1,score1
 
                 j_future_state = json.dumps(future_state)
                 p.stdin.write(j_future_state + os.linesep);p.stdin.flush()
@@ -83,7 +86,7 @@ def mediate(game, args,headless = True, persist_movie = True):
         game.setFullState(current_state)
         win,score = game.tick(action,headless, headless)
         #exit(0)
-        
+    #print score
     if(score is None):
         score = 0
     return win,score, actions, error
