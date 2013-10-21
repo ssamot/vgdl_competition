@@ -1,5 +1,6 @@
 zip -j working_python.zip ../../vgdl_competition/src/clients/python/client.py \
-                       ../../vgdl_competition/src/clients/python/agent.py
+                       ../../vgdl_competition/src/clients/python/agent.py \
+                       ../../vgdl_competition/src/clients/python/mcts_agent.py
 
 #examples.gridphysics.frogs, frog_level
 
@@ -16,9 +17,9 @@ LEVEL="frog_level"
 echo $LEVEL
 
 #kernprof.py -l -v ../../vgdl_competition/src/server/game_executor.py  \
- #                        --game_levels $GAME,$LEVEL \
- #                        --n_times 1 --zip_name working_python.zip --agent_id 2 --run_id 100 --user_name ssamot \
- #                        --tmp_dir /tmp --db_properties ../runtime/system.properties
+#                         --game_levels $GAME,$LEVEL \
+#                         --n_times 1 --zip_name working_python.zip --agent_id 2 --run_id 100 --user_name ssamot \
+#                         --tmp_dir /tmp --db_properties ../runtime/system.properties
 
 python ../../vgdl_competition/src/server/game_executor.py  \
                          --game_levels $GAME,$LEVEL \

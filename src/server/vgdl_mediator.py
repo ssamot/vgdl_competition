@@ -15,9 +15,9 @@ DUMMY_COMMAND["Dummy"] = 2
 
 END_COMMAND = "END_COMMAND\n"
 
-MAXIMUM_TICKS = 1000
+MAXIMUM_TICKS = 20
 
-
+#@profile
 def mediate(game, args,headless = True, persist_movie = True):
     p = Popen(args, shell=True, bufsize=1000000,
           stdin=PIPE, stdout=PIPE, close_fds=True)
@@ -37,8 +37,8 @@ def mediate(game, args,headless = True, persist_movie = True):
     actions = []
     ticks = 0
     #print line; exit()
-    while win is None and ticks< 1000:
-        start = time.time()
+    while win is None and ticks< MAXIMUM_TICKS:
+
         current_state =  game.getFullState(False)
 
         #print ticks
@@ -52,6 +52,7 @@ def mediate(game, args,headless = True, persist_movie = True):
 
 
         while(True):
+
             line = p.stdout.readline()
             #print line; exit()
             if(line[0]) == "0":
@@ -72,6 +73,7 @@ def mediate(game, args,headless = True, persist_movie = True):
                 game.setFullState(j_state, True)
 
                 win1,score1 = game.tick(simulated_action,headless, headless)
+
                 future_state =  game.getFullState(True)
                 #print win1,score1
 
@@ -80,12 +82,15 @@ def mediate(game, args,headless = True, persist_movie = True):
 
 
 
-        print (start - time.time()), "Seconds"
+
 
         actions.append(action)
         game.setFullState(current_state)
+        start = time.time()
         win,score = game.tick(action,headless, headless)
+        print (start - time.time()), "Total Time in Seconds for one tick"
         #exit(0)
+
     #print score
     if(score is None):
         score = 0

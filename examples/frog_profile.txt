@@ -1,0 +1,75 @@
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+    20                                           @profile
+    21                                           def mediate(game, args,headless = True, persist_movie = True):
+    22         1            6      6.0      0.0      p = Popen(args, shell=True, bufsize=1000000,
+    23         1         2640   2640.0      0.0            stdin=PIPE, stdout=PIPE, close_fds=True)
+    24
+    25         1          567    567.0      0.0      actions = game.getPossibleActions()
+    26         1           99     99.0      0.0      j_actions = json.dumps(actions)
+    27
+    28                                               # Initialise the player by passing all possible actions
+    29         1           15     15.0      0.0      p.stdin.write(j_actions + os.linesep);p.stdin.flush()
+    30         1        84189  84189.0      0.1      line = p.stdout.readline()
+    31
+    32
+    33         1            3      3.0      0.0      win = None
+    34         1            1      1.0      0.0      score = 0
+    35         1            2      2.0      0.0      error = None
+    36                                               # play until game ends
+    37         1            3      3.0      0.0      actions = []
+    38         1            2      2.0      0.0      ticks = 0
+    39                                               #print line; exit()
+    40         7           18      2.6      0.0      while win is None and ticks< 1000:
+    41         6           20      3.3      0.0          start = time.time()
+    42         6        29162   4860.3      0.0          current_state =  game.getFullState(False)
+    43
+    44                                                   #print ticks
+    45         6           13      2.2      0.0          ticks+=1
+    46         6        30644   5107.3      0.0          state = game.getFullState(True)
+    47
+    48
+    49         6         2504    417.3      0.0          j = json.dumps(state)
+    50
+    51         6          157     26.2      0.0          p.stdin.write(j + os.linesep);p.stdin.flush()
+    52
+    53
+    54      3591         8654      2.4      0.0          while(True):
+    55      3591      1511077    420.8      1.1              line = p.stdout.readline()
+    56                                                       #print line; exit()
+    57      3591        15599      4.3      0.0              if(line[0]) == "0":
+    58         6          192     32.0      0.0                  j_action = json.loads(line[1:])
+    59         6           12      2.0      0.0                  action = j_action["action"]
+    60         6            9      1.5      0.0                  break
+    61                                                       else:
+    62
+    63                                                           #j_action = json.loads(line[1:])
+    64      3585        40590     11.3      0.0                  if(len(line.split(";"))!=2):
+    65                                                               print "ErrorLine", line
+    66                                                               exit()
+    67      3585       178693     49.8      0.1                  j_action,j_state = line.split(";")
+    68      3585       100318     28.0      0.1                  j_action = json.loads(j_action[1:])
+    69      3585       494017    137.8      0.4                  j_state = json.loads(j_state)
+    70      3585         7296      2.0      0.0                  simulated_action = j_action["action"]
+    71
+    72      3585     42964041  11984.4     31.0                  game.setFullState(j_state, True)
+    73
+    74      3585     72782322  20301.9     52.6                  win1,score1 = game.tick(simulated_action,headless, headless)
+    75      3585     18460854   5149.5     13.3                  future_state =  game.getFullState(True)
+    76                                                           #print win1,score1
+    77
+    78      3585      1477133    412.0      1.1                  j_future_state = json.dumps(future_state)
+    79      3585        88971     24.8      0.1                  p.stdin.write(j_future_state + os.linesep);p.stdin.flush()
+    80
+    81
+    82
+    83         6          223     37.2      0.0          print (start - time.time()), "Seconds"
+    84
+    85         6           17      2.8      0.0          actions.append(action)
+    86         6        49209   8201.5      0.0          game.setFullState(current_state)
+    87         6       121098  20183.0      0.1          win,score = game.tick(action,headless, headless)
+    88                                                   #exit(0)
+    89                                               #print score
+    90         1            2      2.0      0.0      if(score is None):
+    91                                                   score = 0
+    92         1            1      1.0      0.0      return win,score, actions, error

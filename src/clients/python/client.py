@@ -32,8 +32,8 @@ def queryStateActionJSON(state, action):
 
 
 if __name__ == "__main__":
-    import mcts_agent as agent
-
+    #import mcts_agent as agent
+    import agent
     i = 0
     line = "start"
     while (line != ""):
