@@ -1,3 +1,5 @@
+import java.util.List;
+
 /**
  * Created by IntelliJ IDEA.
  * User: togelius
@@ -5,4 +7,7 @@
  * Time: 17:24 PM
  */
 public class GameState {
+
+    public List objects;
+
 }
