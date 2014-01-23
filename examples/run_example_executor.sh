@@ -28,7 +28,7 @@ echo $LEVEL
 
 python ../../vgdl_competition/src/server/game_executor.py  \
                          --game_levels $GAME,$LEVEL \
-                         --n_times 1 --zip_name working_java.zip --agent_id 2 --run_id 100 --user_name $USER_NAME \
+                         --n_times 1 --zip_name working_java.zip --agent_id 2 --run_id 200 --user_name $USER_NAME \
                          --tmp_dir /tmp --db_properties ../runtime/system.properties \
                          --vgdl_jar $VGDL_JAR
 

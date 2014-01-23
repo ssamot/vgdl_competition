@@ -97,7 +97,7 @@ def execute_game_map(logger, language,  game_map, args, cmd_line, dir_name, exec
                 clean_exit(args, logger, dir_name, execution_log)
 
             if(language == "java"):
-                from java_handler import compile_java
+                from java_handler import compile_java, run_java
                 compilation_result = compile_java(args.user_name,dir_name, args.vgdl_jar, supported_file_names["java"] )
                 if(compilation_result[1]!=""):
                     html_text = "<br />".join(compilation_result[1].split("\n"))
@@ -106,11 +106,19 @@ def execute_game_map(logger, language,  game_map, args, cmd_line, dir_name, exec
                 else:
                     logger.debug("Java Agent compiled successfully for user_name " + args.user_name)
 
-                win, score, actions, error_str = run_java(game, cmd_line)
-            action_filename = dir_name + "/" + str(module[1]) + "_" + str(level[1]) + "_actions.log"
+                win, score, actions, out_str, error_str = run_java(args.user_name, dir_name, args.vgdl_jar, module[1], level[1])
+
+                if(error_str==""):
+                    html_text = "<br />".join(out_str.split("\n"))
+                    logger.debug("OUT: " + html_text)
+                    logger.info("OUT: Java Agent run successfully for user_name ")
+
+
+
+            action_filename = dir_name + "/" + str(module[1].split("/")[-1].split(".")[-2]) + "_" + str(level[1].split("/")[-1].split(".")[-2]) + "_actions.log"
             with open(action_filename, "w") as action_file:
                 action_file.write(str(actions))
-            if (error_str is None):
+            if (error_str == ""):
                 logger.info(
                     tuple_to_str(module) + " " + tuple_to_str(level) + " " + str(score) + " " + str(action_filename))
             else:
