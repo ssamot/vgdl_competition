@@ -116,8 +116,8 @@ def load_game(module_str, level_str):
     #g.startGameExternalPlayer(headless = True, persist_movie = True)
     return g
 
-def compile_java(file_name):
-    p = Popen("javac " + file_name, shell=True, bufsize=1000000,
+def compile_java(username, zip_file_name, file_name):
+    p = Popen("javac " + file_name + "." + username, shell=True, bufsize=1000000,
           stderr=PIPE, stdout=PIPE, close_fds=True)
           
     out, err = p.communicate()
@@ -125,7 +125,8 @@ def compile_java(file_name):
     print err
 
 if __name__=="__main__":
-    #compile_java("Agent.java")
+    username = "ssamot"
+    compile_java("Agent.java")
     game = load_game("examples.gridphysics.frogs")
     print mediate(game,"python /home/ssamot/projects/vgdl/vgdl_competition/src/clients/python/client.py")
     #args = ["java", "-cp" ]
