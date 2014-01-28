@@ -24,7 +24,7 @@ supported_file_names["java"] = "Agent.java"
 
 execution_commands = {}
 execution_commands["java"] = "cd {dir_name}; java -cp vgdl.jar;client.jar ClientExecutor"
-new_line = "<br />"
+new_line = "<br/>"
 
 supported_languages = {v: k for k, v in supported_file_names.items()}
 
@@ -89,8 +89,14 @@ def confirm_game_files(map, level):
     return "Found Both Elements"
 
 def execute_game_map(logger, language,  game_map, args, cmd_line, dir_name, execution_log):
+    games_played = 1
+    total_games = 0
     for module in game_map:
         for level in game_map[module]:
+            total_games+=1
+
+    for m,module in enumerate(game_map):
+        for l,level in enumerate(game_map[module]):
             print level, module, level, language, args.game_dir
             map_file = args.game_dir + module[1]
             level_file = args.game_dir + level[1]
@@ -114,22 +120,26 @@ def execute_game_map(logger, language,  game_map, args, cmd_line, dir_name, exec
 
                 if(error_str==""):
                     html_text = new_line.join(out_str.split("\n"))
-                    logger.debug("OUT: " + html_text)
-                    logger.info("OUT: Java Agent run successfully for user_name " + args.user_name)
+                    logger.debug("Game output: " + html_text)
+                    logger.debug("Java Agent run successfully for user_name " + args.user_name)
 
 
 
-            action_filename = dir_name + "/" + str(module[1].split("/")[-1].split(".")[-2]) + "_" + str(level[1].split("/")[-1].split(".")[-2]) + "_actions.log"
+            action_filename = dir_name + "/" + str(module[1].split("/")[-1].split(".")[-2]) + "_" +\
+                              str(level[1].split("/")[-1].split(".")[-2]) + "_actions_" + \
+                              str(module[0]) + "_" + str(level[0]) + "_" + str(l) + ".log"
             with open(action_filename, "w") as action_file:
                 action_file.write(str(actions))
             if (error_str == ""):
+                logger.debug("PERCENTAGE " + str(games_played) + "/" + str(total_games))
                 logger.info(
                     tuple_to_str(module) + " " + tuple_to_str(level) + " " + str(score) + " " + str(action_filename))
-                clean_exit(args, logger, dir_name, execution_log)
+                #clean_exit(args, logger, dir_name, execution_log)
             else:
                 html_text = new_line.join(error_str.split("\n"))
                 logger.error(tuple_to_str(module) + " " + tuple_to_str(level) + " " + html_text)
                 clean_exit(args, logger, dir_name, execution_log)
+            games_played+=1
 
 
 def clean_exit(args, logger, dir_name, execution_log):

@@ -7,7 +7,7 @@ cd $current_dir
 
 #examples.gridphysics.frogs, frog_level
 
-USER_NAME="dieg"
+USER_NAME="ssamot"
 GAME="frogs.txt"
 LEVEL="frogs_lvl0.txt"
 VGDL_JAR="/home/ssamot/projects/vgdl/java-vgdl/build/dist/vgdl.jar"

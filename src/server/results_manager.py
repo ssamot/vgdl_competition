@@ -52,7 +52,7 @@ def process_log(args):
                     # check if we have reached the end of the file
                     current_timestamp = now.strftime(splitted[0] + " " + splitted[1] )
                     if(splitted[2] == "DEBUG"):
-                        break
+                        pass
                     else:
                         log_level = splitted[2]
                         error_msg = " ".join(map(str,splitted[3:]))
@@ -63,7 +63,7 @@ def process_log(args):
                     l_split = splitted[4].split(",")
                     level_id = long(l_split[0][-1:]) 
                       
-                    score = long(splitted[5])
+                    score = float(splitted[5])
                     action_file =  splitted[6]
                     games.append((game_id,level_id,score, action_file))
                     

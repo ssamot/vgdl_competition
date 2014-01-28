@@ -29,7 +29,13 @@ def run_java(username, dir_name, vgdl_jar, game_map, game_level):
 
     out, err = p.communicate()
     print out,err
-    return [],[],[],out,err
+    result = out.split("\n")[-2]
+    score = float(result.split("Score: ")[-1])
+    win = result[5:].split(".")[0]
+    print score, win
+    score = float(score)
+    #p.kill()
+    return win,score,[],out,err
 
 
 if __name__=="__main__":
