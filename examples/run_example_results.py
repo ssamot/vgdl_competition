@@ -1,3 +1,3 @@
 python ../../vgdl_competition/src/server/results_manager.py  \
-                         --execution_log /tmp/test_user/1/execution.log \
+                         --execution_log /home/diego/Dropbox/ptsp/123654789/gvg/web/results/diego/38/execution.log \
                          --db_properties ../runtime/system.properties

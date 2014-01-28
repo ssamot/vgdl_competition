@@ -7,10 +7,12 @@ cd $current_dir
 
 #examples.gridphysics.frogs, frog_level
 
-USER_NAME="ssamot"
-GAME="/home/ssamot/projects/vgdl/java-vgdl/examples/gridphysics/frogs.txt"
-LEVEL="/home/ssamot/projects/vgdl/java-vgdl/examples/gridphysics/frogs_lvl0.txt"
+USER_NAME="dieg"
+GAME="frogs.txt"
+LEVEL="frogs_lvl0.txt"
 VGDL_JAR="/home/ssamot/projects/vgdl/java-vgdl/build/dist/vgdl.jar"
+GAMES_DIR="/home/ssamot/projects/vgdl/java-vgdl/examples/gridphysics/"
+
 
 #GAME="examples.gridphysics.chase"
 #LEVEL="chase_level"
@@ -28,9 +30,9 @@ echo $LEVEL
 
 python ../../vgdl_competition/src/server/game_executor.py  \
                          --game_levels $GAME,$LEVEL \
-                         --n_times 1 --zip_name broken.zip --agent_id 2 --run_id 300 --user_name $USER_NAME \
+                         --n_times 1 --zip_name working_java.zip --agent_id 2 --run_id 300 --user_name $USER_NAME \
                          --tmp_dir /tmp --db_properties ../runtime/system.properties \
-                         --vgdl_jar $VGDL_JAR
+                         --vgdl_jar $VGDL_JAR --game_dir $GAMES_DIR
 
 #python ../../vgdl_competition/src/server/game_executor.py  \
 #                         --game_levels examples.gridphysics.frogs,frog_level \

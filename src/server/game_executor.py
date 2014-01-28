@@ -24,6 +24,7 @@ supported_file_names["java"] = "Agent.java"
 
 execution_commands = {}
 execution_commands["java"] = "cd {dir_name}; java -cp vgdl.jar;client.jar ClientExecutor"
+new_line = "<br />"
 
 supported_languages = {v: k for k, v in supported_file_names.items()}
 
@@ -48,7 +49,7 @@ def extract_game_map(args):
             game_name = (long(game), db_utils.get_game_info(db, game)["game_desc_file"])
             #print db_utils.get_levels_from_game(db,game)
             lvl_rows = db_utils.get_levels_from_game(db, game)
-            lvl_map = {str(row[0]): row[1] for row in lvl_rows}
+            lvl_map = {str(row[0]): row[3] for row in lvl_rows}
             # lvl_ids   =  [str(row[0]) for row in lvl_rows ]
             #lvl_names = 
             #print lvl_rows
@@ -90,28 +91,31 @@ def confirm_game_files(map, level):
 def execute_game_map(logger, language,  game_map, args, cmd_line, dir_name, execution_log):
     for module in game_map:
         for level in game_map[module]:
-            print level, module, level, language
-            game = confirm_game_files(module[1], level[1])
+            print level, module, level, language, args.game_dir
+            map_file = args.game_dir + module[1]
+            level_file = args.game_dir + level[1]
+            game = confirm_game_files(map_file, level_file)
             if (game == None):
-                logger.fatal(tuple_to_str(module) + ", " + tuple_to_str(level) + ", " + "Cannot load game/level")
+                logger.fatal(tuple_to_str(map_file) + ", " + tuple_to_str(level) + ", " + "Cannot load game/level")
                 clean_exit(args, logger, dir_name, execution_log)
 
             if(language == "java"):
                 from java_handler import compile_java, run_java
                 compilation_result = compile_java(args.user_name,dir_name, args.vgdl_jar, supported_file_names["java"] )
                 if(compilation_result[1]!=""):
-                    html_text = "<br />".join(compilation_result[1].split("\n"))
+                    html_text = new_line.join(compilation_result[1].split("\n"))
                     logger.fatal(html_text +  ", " + "Cannot compile agent")
                     clean_exit(args, logger, dir_name, execution_log)
                 else:
-                    logger.debug("Java Agent compiled successfully for user_name " + args.user_name)
+                    pass
+                    #logger.debug("Java Agent compiled successfully for user_name " + args.user_name)
 
-                win, score, actions, out_str, error_str = run_java(args.user_name, dir_name, args.vgdl_jar, module[1], level[1])
+                win, score, actions, out_str, error_str = run_java(args.user_name, dir_name, args.vgdl_jar, map_file, level_file)
 
                 if(error_str==""):
-                    html_text = "<br />".join(out_str.split("\n"))
+                    html_text = new_line.join(out_str.split("\n"))
                     logger.debug("OUT: " + html_text)
-                    logger.info("OUT: Java Agent run successfully for user_name ")
+                    logger.info("OUT: Java Agent run successfully for user_name " + args.user_name)
 
 
 
@@ -121,8 +125,10 @@ def execute_game_map(logger, language,  game_map, args, cmd_line, dir_name, exec
             if (error_str == ""):
                 logger.info(
                     tuple_to_str(module) + " " + tuple_to_str(level) + " " + str(score) + " " + str(action_filename))
+                clean_exit(args, logger, dir_name, execution_log)
             else:
-                logger.error(tuple_to_str(module) + " " + tuple_to_str(level) + " " + error_str)
+                html_text = new_line.join(error_str.split("\n"))
+                logger.error(tuple_to_str(module) + " " + tuple_to_str(level) + " " + html_text)
                 clean_exit(args, logger, dir_name, execution_log)
 
 
@@ -235,6 +241,12 @@ if __name__ == "__main__":
     # Database commands               
     parser.add_argument('--db_properties', type=str,
                         help='Database properties', required=False)
+
+
+    parser.add_argument('--game_dir', type=str,
+                        help='VGDL games directory', required=True)
+
+
 
     #print "etf"
 
