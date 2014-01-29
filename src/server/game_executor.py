@@ -77,13 +77,26 @@ def confirm_game_files(map, level):
         with open(map):
             pass
     except IOError:
-        return None
+        return False
 
     try:
         with open(level):
             pass
     except IOError:
-        return None
+        return False
+
+    return True
+
+def confirm_agent_file(agent_file):
+    try:
+        with open(agent_file):
+            pass
+    except IOError:
+        return False
+
+    return True
+
+
 
 
     return "Found Both Elements"
@@ -100,9 +113,9 @@ def execute_game_map(logger, language,  game_map, args, cmd_line, dir_name, exec
             print level, module, level, language, args.game_dir
             map_file = args.game_dir + module[1]
             level_file = args.game_dir + level[1]
-            game = confirm_game_files(map_file, level_file)
-            if (game == None):
-                logger.fatal(tuple_to_str(map_file) + ", " + tuple_to_str(level) + ", " + "Cannot load game/level")
+
+            if not confirm_game_files(map_file, level_file):
+                logger.fatal(map_file + ", " + level_file + ", " + "Cannot load game/level")
                 clean_exit(args, logger, dir_name, execution_log)
 
             if(language == "java"):
@@ -116,6 +129,11 @@ def execute_game_map(logger, language,  game_map, args, cmd_line, dir_name, exec
                     pass
                     #logger.debug("Java Agent compiled successfully for user_name " + args.user_name)
 
+                agent_file_name = dir_name + "/" + args.user_name + "/Agent.java"
+                if not confirm_agent_file(agent_file_name):
+                    logger.fatal("Cannot find agent file: " + agent_file_name)
+                    clean_exit(args, logger, dir_name, execution_log)
+
                 win, score, actions, out_str, error_str = run_java(args.user_name, dir_name, args.vgdl_jar, map_file, level_file)
 
                 if(error_str==""):
@@ -128,8 +146,8 @@ def execute_game_map(logger, language,  game_map, args, cmd_line, dir_name, exec
             action_filename = dir_name + "/" + str(module[1].split("/")[-1].split(".")[-2]) + "_" +\
                               str(level[1].split("/")[-1].split(".")[-2]) + "_actions_" + \
                               str(module[0]) + "_" + str(level[0]) + "_" + str(l) + ".log"
-            with open(action_filename, "w") as action_file:
-                action_file.write(str(actions))
+            #with open(action_filename, "w") as action_file:
+            #    action_file.write(str(actions))
             if (error_str == ""):
                 logger.debug("PERCENTAGE " + str(games_played) + "/" + str(total_games))
                 logger.info(
