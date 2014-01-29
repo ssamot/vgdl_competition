@@ -110,6 +110,10 @@ def execute_game_map(logger, language,  game_map, args, cmd_line, dir_name, exec
 
     for m,module in enumerate(game_map):
         for l,level in enumerate(game_map[module]):
+
+            action_filename = dir_name + "/" + str(module[1].split("/")[-1].split(".")[-2]) + "_" +\
+                              str(level[1].split("/")[-1].split(".")[-2]) + "_actions_" + \
+                              str(module[0]) + "_" + str(level[0]) + "_" + str(l) + ".log"
             print level, module, level, language, args.game_dir
             map_file = args.game_dir + module[1]
             level_file = args.game_dir + level[1]
@@ -134,7 +138,7 @@ def execute_game_map(logger, language,  game_map, args, cmd_line, dir_name, exec
                     logger.fatal("Cannot find agent file: " + agent_file_name)
                     clean_exit(args, logger, dir_name, execution_log)
 
-                win, score, actions, out_str, error_str = run_java(args.user_name, dir_name, args.vgdl_jar, map_file, level_file)
+                win, score, actions, out_str, error_str = run_java(args.user_name, dir_name, args.vgdl_jar, map_file, level_file, action_filename)
 
                 if(error_str==""):
                     html_text = new_line.join(out_str.split("\n"))
@@ -143,9 +147,7 @@ def execute_game_map(logger, language,  game_map, args, cmd_line, dir_name, exec
 
 
 
-            action_filename = dir_name + "/" + str(module[1].split("/")[-1].split(".")[-2]) + "_" +\
-                              str(level[1].split("/")[-1].split(".")[-2]) + "_actions_" + \
-                              str(module[0]) + "_" + str(level[0]) + "_" + str(l) + ".log"
+
             #with open(action_filename, "w") as action_file:
             #    action_file.write(str(actions))
             if (error_str == ""):

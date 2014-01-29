@@ -36,6 +36,8 @@ public class Agent extends AbstractPlayer {
             remaining = timeDue - System.currentTimeMillis();
         }
 
+        logAction(action);
+
         return action;
     }
 }
