@@ -15,7 +15,7 @@ def calc_score(games):
     #Sum of the scores on each game, for now.
     s = 0
     for game in games:
-        s+=game[2]
+        s+=game[4]
     return s
     
     
