@@ -83,10 +83,12 @@ def process_log(args):
         for game in games:		
             game_id = game[0]
             level_id = game[1]
-            score = game[2]
-            actions_file = game[3]
-    
-            cur.execute("REPLACE INTO matches (run_id,level_id,game_id,user_id,human_play,actions_file,score) VALUES (%s,%s,%s,%s,0,%s,%s)",(run_id,level_id,game_id,user_id,actions_file,score))
+            actions_file = game[2]
+            winner = game[3]
+            score = game[4]
+            timesteps = game[5]
+
+            cur.execute("REPLACE INTO matches (run_id,level_id,game_id,user_id,human_play,actions_file,score,winner,timesteps) VALUES (%s,%s,%s,%s,0,%s,%s,%s,%s)",(run_id,level_id,game_id,user_id,actions_file,score,winner,timesteps))
 
     elif log_level == 'ERROR':
         #Set controller status to the proper new state:
