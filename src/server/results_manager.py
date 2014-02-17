@@ -62,10 +62,13 @@ def process_log(args):
                     game_id = long(g_split[0][-1:]) 
                     l_split = splitted[4].split(",")
                     level_id = long(l_split[0][-1:]) 
-                      
-                    score = float(splitted[5])
-                    action_file =  splitted[6]
-                    games.append((game_id,level_id,score, action_file))
+			                      
+                    action_file =  splitted[5]
+                    winner = float(splitted[6])
+                    score = float(splitted[7])
+                    timesteps = float(splitted[8])
+
+                    games.append((game_id,level_id,action_file,winner,score,timesteps))
                     
                 
     print log_level, run_id, user_id, games, current_timestamp
