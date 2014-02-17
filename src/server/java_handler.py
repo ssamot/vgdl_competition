@@ -7,7 +7,7 @@ def compile_java(username, dir_name, vgdl_jar, file_name):
     #print dir_name + "------------------"
     javac_command = "cd " + dir_name + ";"
     javac_command+= "javac -cp " +  vgdl_jar + " "
-    javac_command+="$(find " + dir_name + "  | grep \\\.java\n)"
+    javac_command+="$(find " + dir_name + "  | grep \\\.java$)"
     #print javac_command
     p = Popen(javac_command, shell=True, bufsize=1000000,
           stderr=PIPE, stdout=PIPE, close_fds=True)
