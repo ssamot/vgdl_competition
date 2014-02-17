@@ -138,7 +138,7 @@ def execute_game_map(logger, language,  game_map, args, cmd_line, dir_name, exec
                     logger.fatal("Cannot find agent file: " + agent_file_name)
                     clean_exit(args, logger, dir_name, execution_log)
 
-                win, score, actions, out_str, error_str = run_java(args.user_name, dir_name, args.vgdl_jar, map_file, level_file, action_filename)
+                win, score, time, actions, out_str, error_str = run_java(args.user_name, dir_name, args.vgdl_jar, map_file, level_file, action_filename)
 
                 if(error_str==""):
                     html_text = new_line.join(out_str.split("\n"))
@@ -153,7 +153,7 @@ def execute_game_map(logger, language,  game_map, args, cmd_line, dir_name, exec
             if (error_str == ""):
                 logger.debug("PERCENTAGE " + str(games_played) + "/" + str(total_games))
                 logger.info(
-                    tuple_to_str(module) + " " + tuple_to_str(level) + " " + str(score) + " " + str(action_filename))
+                    tuple_to_str(module) + " " + tuple_to_str(level) + " "  + str(action_filename) + " " + str(win) + " " + str(score) + " " + str(time))
                 #clean_exit(args, logger, dir_name, execution_log)
             else:
                 html_text = new_line.join(error_str.split("\n"))

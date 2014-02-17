@@ -31,15 +31,18 @@ def run_java(username, dir_name, vgdl_jar, game_map, game_level, action_filename
     print out,err
     if(err == ""):
         result = out.split("\n")[-2]
-        score = float(result.split("Score: ")[-1])
-        win = result[5:].split(".")[0]
-        print score, win
+        win_str, score_str, time_str = result.split(",")
+        score = float(score_str.split(":")[-1])
+        win = int(win_str.split(":")[-1])
+        time = int(time_str.split(":")[-1])
+        #print score, win, time
         score = float(score)
     else:
-        score = -1
-        win = "loss"
+        score = -9999
+        win = -100
+        time = 0
     #p.kill()
-    return win,score,[],out,err
+    return win,score,time, [],out,err
 
 
 if __name__=="__main__":
