@@ -47,7 +47,7 @@ def process_log(args):
                 user_id = long(line.split(" ")[-1])
             if(i>2):
                 splitted = line[:-1].split(" ")
-                print run_id, user_id, splitted
+                #print run_id, user_id, splitted
                 if(splitted[2] != "INFO" ):
                     # check if we have reached the end of the file
                     current_timestamp = now.strftime(splitted[0] + " " + splitted[1] )
@@ -58,21 +58,25 @@ def process_log(args):
                         error_msg = " ".join(map(str,splitted[3:]))
                         break
                 else:
+
                     g_split = splitted[3].split(",")
-                    game_id = long(g_split[0][-1:]) 
+
+                    game_id = long(g_split[0][1:])
                     l_split = splitted[4].split(",")
-                    level_id = long(l_split[0][-1:]) 
-			                      
+                    level_id = long(l_split[0][1:])
+
+                    #print game_id, level_id, l_split[0][1:]
                     action_file =  splitted[5]
                     winner = float(splitted[6])
                     score = float(splitted[7])
                     timesteps = float(splitted[8])
-
+                    print (game_id,level_id,action_file,winner,score,timesteps)
                     games.append((game_id,level_id,action_file,winner,score,timesteps))
                     
                 
-    print log_level, run_id, user_id, games, current_timestamp
+    #print log_level, run_id, user_id, games, current_timestamp
     #exit(0)
+    #print games
             
 
     if log_level == 'INFO':
