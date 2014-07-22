@@ -21,7 +21,7 @@ def run_java(username, dir_name, vgdl_jar, game_map, game_level, action_filename
     #print vgdl_jar
     #java -cp /home/ssamot/projects/vgdl/java-vgdl/build/dist/vgdl.jar: core.competition.AgentExecuto
     java_command = "cd " + dir_name + ";"
-    java_command+= "java -cp " +  vgdl_jar + ": "
+    java_command+= "java -cp " +  vgdl_jar + ": -Xms512m -Xmx2048m "
     java_command+="core.competition.AgentExecutor " + game_map + " " + game_level + " " + username + ".Agent " + action_filename
     print java_command
     p = Popen(java_command, shell=True, bufsize=1000000,

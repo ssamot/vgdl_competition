@@ -23,7 +23,7 @@ supported_file_names = {}
 supported_file_names["java"] = "Agent.java"
 
 execution_commands = {}
-execution_commands["java"] = "cd {dir_name}; java -cp vgdl.jar;client.jar ClientExecutor"
+execution_commands["java"] = "cd {dir_name}; java -cp vgdl.jar;client.jar -Xms1024m -Xmx2048m ClientExecutor"
 new_line = "<br/>"
 
 supported_languages = {v: k for k, v in supported_file_names.items()}
