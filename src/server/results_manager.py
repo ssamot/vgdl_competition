@@ -39,6 +39,7 @@ def process_log(args):
 
     log_level = "INFO";
     games = []
+    print args.execution_log
     with open(args.execution_log, 'r') as log_file :
         for i, line in enumerate(log_file):
             if(i == 1):
@@ -50,7 +51,8 @@ def process_log(args):
                 #print run_id, user_id, splitted
                 if(splitted[2] != "INFO" ):
                     # check if we have reached the end of the file
-                    current_timestamp = now.strftime(splitted[0] + " " + splitted[1] )
+                    sp_time = splitted[1][:-1].split(",")[0];
+                    current_timestamp = now.strftime(splitted[0] + " " + sp_time )
                     if(splitted[2] == "DEBUG"):
                         pass
                     else:
@@ -74,7 +76,7 @@ def process_log(args):
                     games.append((game_id,level_id,action_file,winner,score,timesteps))
                     
                 
-    #print log_level, run_id, user_id, games, current_timestamp
+    print log_level, run_id, user_id, games, current_timestamp
     #exit(0)
     #print games
             
@@ -83,8 +85,8 @@ def process_log(args):
         #total score:
         score = calc_score(games)
         #Set controller status to the proper new state:
-        cur.execute("UPDATE runs set run_state = 'ok', end_time = %s, run_log_file = %s, score = %s where run_id = %s", (current_timestamp,args.execution_log,score,run_id))
-        cur.execute("UPDATE users set controller_status = 'OK' where user_id = %s", (user_id))
+        cur.execute("UPDATE runs set run_state = 'ok', end_time = %s, run_log_file = %s, score = %s where run_id = %s", [current_timestamp,args.execution_log,score,run_id])
+        cur.execute("UPDATE users set controller_status = 'OK' where user_id = %s", [user_id])
 
 	#One match per game played into the database:
         for game in games:		
@@ -95,18 +97,18 @@ def process_log(args):
             score = game[4]
             timesteps = game[5]
 
-            cur.execute("REPLACE INTO matches (run_id,level_id,game_id,user_id,human_play,actions_file,score,winner,timesteps) VALUES (%s,%s,%s,%s,0,%s,%s,%s,%s)",(run_id,level_id,game_id,user_id,actions_file,score,winner,timesteps))
+            cur.execute("REPLACE INTO matches (run_id,level_id,game_id,user_id,human_play,actions_file,score,winner,timesteps) VALUES (%s,%s,%s,%s,0,%s,%s,%s,%s)",[run_id,level_id,game_id,user_id,actions_file,score,winner,timesteps])
 
     elif log_level == 'ERROR':
         #Set controller status to the proper new state:
-        cur.execute("UPDATE runs set run_state = 'crash', end_time = %s, run_log_file = %s, run_msg = %s where run_id = %s", (current_timestamp,args.execution_log,error_msg,run_id))
-        cur.execute("UPDATE users set controller_status = 'crash' where user_id = %s", (user_id))
+        cur.execute("UPDATE runs set run_state = 'crash', end_time = %s, run_log_file = %s, run_msg = %s where run_id = %s", [current_timestamp,args.execution_log,error_msg,run_id])
+        cur.execute("UPDATE users set controller_status = 'crash' where user_id = %s", [user_id])
 
     elif log_level == 'CRITICAL':
         print  (current_timestamp,args.execution_log,error_msg,run_id)
         #Set controller status to the proper new state:
-        cur.execute("UPDATE runs set run_state = 'failed', end_time = %s, run_log_file = %s, run_msg = %s where run_id = %s", (current_timestamp,args.execution_log,error_msg,run_id))
-        cur.execute("UPDATE users set controller_status = 'failed' where user_id = %s", (user_id))
+        cur.execute("UPDATE runs set run_state = 'failed', end_time = %s, run_log_file = %s, run_msg = %s where run_id = %s", [current_timestamp,args.execution_log,error_msg,run_id])
+        cur.execute("UPDATE users set controller_status = 'failed' where user_id = %s", [user_id])
 
 
 

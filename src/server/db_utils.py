@@ -31,7 +31,7 @@ def get_game_info(db, game_id):
     #This cursor allows access as in a dictionary:
     cur = db.cursor(mdb.cursors.DictCursor)
     
-    cur.execute("SELECT * from games where game_id = %s", (game_id))
+    cur.execute("SELECT * from games where game_id = %s", [game_id])
     game_data = cur.fetchone()
     return game_data
     
@@ -43,7 +43,7 @@ def get_levels_from_game(db, game_id):
     #This cursor allows access as AN ARRAY:
     cur = db.cursor()
 
-    cur.execute("SELECT * from levels where game_id = %s", (game_id))
+    cur.execute("SELECT * from levels where game_id = %s", [game_id])
     levels = cur.fetchall()
 
     return levels
@@ -55,7 +55,7 @@ def get_level_ids_from_game(db, game_id):
     #This cursor allows access as AN ARRAY:
     cur = db.cursor()
 
-    cur.execute("SELECT level_id from levels where game_id = %s", (game_id))
+    cur.execute("SELECT level_id from levels where game_id = %s", [game_id])
     levels = cur.fetchall()
     level_ids = list(itertools.chain.from_iterable(levels))
 
@@ -68,7 +68,7 @@ def get_level_info(db, level_id):
     #This cursor allows access as in a dictionary:
     cur = db.cursor(mdb.cursors.DictCursor)
 
-    cur.execute("SELECT * from levels where level_id = %s", (level_id))
+    cur.execute("SELECT * from levels where level_id = %s", [level_id])
     level = cur.fetchone()
 
     return level

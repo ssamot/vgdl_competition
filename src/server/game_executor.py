@@ -27,6 +27,7 @@ execution_commands["java"] = "cd {dir_name}; java -cp vgdl.jar;client.jar -Xms10
 new_line = "<br/>"
 
 supported_languages = {v: k for k, v in supported_file_names.items()}
+#supported_languages = {"java"}
 
 
 def tuple_to_str(tpl):
