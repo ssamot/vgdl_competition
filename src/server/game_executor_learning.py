@@ -21,11 +21,13 @@ import results_manager
 supported_file_names = {}
 
 supported_file_names["java"] = "Agent.java"
+supported_file_names["python"] = "agent.py"
 
 execution_commands = {}
 execution_commands["java"] = "dummy"
-execution_commands["python"] = "dummy"
-new_line = "<br/>"
+execution_commands["python"] = "'python /home/ssamot/projects/vgdl/gvgai/clients/python_learning_client/pyclient.py"
+#new_line = "<br/>"
+new_line = "\n"
 
 supported_languages = {v: k for k, v in supported_file_names.items()}
 #supported_languages = {"java"}
@@ -98,9 +100,6 @@ def confirm_agent_file(agent_file):
 
     return True
 
-
-
-
     return "Found Both Elements"
 
 def execute_game_map(logger, language,  game_map, args, cmd_line, dir_name, execution_log):
@@ -124,6 +123,11 @@ def execute_game_map(logger, language,  game_map, args, cmd_line, dir_name, exec
                 logger.fatal(map_file + ", " + level_file + ", " + "Cannot load game/level")
                 clean_exit(args, logger, dir_name, execution_log)
 
+            agent_file_name = dir_name + "/" + args.user_name + "/" + supported_file_names["python"]
+            if not confirm_agent_file(agent_file_name):
+                    logger.fatal("Cannot find agent file: " + agent_file_name)
+                    clean_exit(args, logger, dir_name, execution_log)
+
             if(language == "java"):
                 from java_handler import compile_java, run_java
                 compilation_result = compile_java(args.user_name,dir_name, args.vgdl_jar, supported_file_names["java"] )
@@ -135,10 +139,7 @@ def execute_game_map(logger, language,  game_map, args, cmd_line, dir_name, exec
                     pass
                     #logger.debug("Java Agent compiled successfully for user_name " + args.user_name)
 
-                agent_file_name = dir_name + "/" + args.user_name + "/Agent.java"
-                if not confirm_agent_file(agent_file_name):
-                    logger.fatal("Cannot find agent file: " + agent_file_name)
-                    clean_exit(args, logger, dir_name, execution_log)
+
 
                 win, score, time, actions, out_str, error_str = run_java(args.user_name, dir_name, args.vgdl_jar, map_file, level_file, action_filename)
 
@@ -146,6 +147,15 @@ def execute_game_map(logger, language,  game_map, args, cmd_line, dir_name, exec
                     html_text = new_line.join(out_str.split("\n"))
                     logger.debug("Game output: " + html_text)
                     logger.debug("Java Agent run successfully for user_name " + args.user_name)
+            if(language == "python"):
+                from python_handler import run_python
+
+                win, score, time, actions, out_str, error_str = run_python(args.user_name, dir_name, args.vgdl_jar, map_file, level_file, action_filename,logger, execution_commands["python"])
+
+                if(error_str==""):
+                    html_text = new_line.join(out_str.split("\n"))
+                    logger.debug("Game output: " + html_text)
+                    logger.debug("Python Agent run successfully for user_name " + args.user_name)
 
 
 

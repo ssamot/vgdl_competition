@@ -1,8 +1,8 @@
 current_dir=`pwd`
 echo $current_dir
 
-cd ../../vgdl_competition/src/clients/java/
-zip -r $current_dir/working_java.zip .
+cd ../../vgdl_competition/src/clients/python_learning/
+zip -r $current_dir/dummy_python_learning.zip .
 cd $current_dir
 
 #examples.gridphysics.frogs, frog_level
@@ -12,7 +12,6 @@ GAME="frogs.txt"
 LEVEL="frogs_lvl0.txt"
 VGDL_JAR="/home/ssamot/projects/vgdl/gvgai/dist/gvgai.jar"
 GAMES_DIR="/home/ssamot/projects/vgdl/gvgai/examples/gridphysics/"
-
 
 #GAME="examples.gridphysics.chase"
 #LEVEL="chase_level"
@@ -28,9 +27,9 @@ echo $LEVEL
 #                         --n_times 1 --zip_name working_python.zip --agent_id 2 --run_id 100 --user_name ssamot \
 #                         --tmp_dir /tmp --db_properties ../runtime/system.properties
 
-python ../../vgdl_competition/src/server/game_executor.py  \
+python ../../vgdl_competition/src/server/game_executor_learning.py  \
                          --game_levels $GAME,$LEVEL \
-                         --n_times 1 --zip_name working_java.zip --agent_id 2 --run_id 300 --user_name $USER_NAME \
+                         --n_times 1 --zip_name dummy_python_learning.zip --agent_id 2 --run_id 300 --user_name $USER_NAME \
                          --tmp_dir /tmp --db_properties ../runtime/system.properties \
                          --vgdl_jar $VGDL_JAR --game_dir $GAMES_DIR
 
