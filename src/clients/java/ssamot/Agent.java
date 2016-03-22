@@ -1,12 +1,12 @@
 package ssamot;
 
+
+
+import controllers.Heuristics.SimpleStateHeuristic;
 import core.game.StateObservation;
 import core.player.AbstractPlayer;
 import ontology.Types;
-import tools.Vector2d;
-
-import java.util.ArrayList;
-import java.util.Random;
+import tools.ElapsedCpuTimer;
 
 /**
  * Created with IntelliJ IDEA.
