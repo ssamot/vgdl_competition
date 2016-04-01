@@ -30,7 +30,7 @@ def run_java(username, dir_name, vgdl_jar, game_map, game_level, action_filename
     out, err = p.communicate()
     print out,err
     if(err == ""):
-        result = out.split("\n")[-2]
+        result = out.split("\n")[-3]
         win_str, score_str, time_str = result.split(",")
         score = float(score_str.split(":")[-1])
         win = int(win_str.split(":")[-1])
